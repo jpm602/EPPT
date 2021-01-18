@@ -56,8 +56,7 @@ B5DriftChamberSD::~B5DriftChamberSD()
 
 void B5DriftChamberSD::Initialize(G4HCofThisEvent* hce)
 {
-  fHitsCollection 
-    = new B5DriftChamberHitsCollection(SensitiveDetectorName,collectionName[0]);
+  fHitsCollection = new B5DriftChamberHitsCollection(SensitiveDetectorName,collectionName[0]);
 
   if (fHCID<0) { 
      fHCID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection); 
@@ -79,8 +78,7 @@ G4bool B5DriftChamberSD::ProcessHits(G4Step* step, G4TouchableHistory*)
   auto copyNo = motherPhysical->GetCopyNo();
 
   auto worldPos = preStepPoint->GetPosition();
-  auto localPos 
-    = touchable->GetHistory()->GetTopTransform().TransformPoint(worldPos);
+  auto localPos = touchable->GetHistory()->GetTopTransform().TransformPoint(worldPos);
   
   auto hit = new B5DriftChamberHit(copyNo);
   hit->SetWorldPos(worldPos);

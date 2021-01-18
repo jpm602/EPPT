@@ -58,17 +58,13 @@ B5RunAction::B5RunAction(B5EventAction* eventAction)
   //
   
   // Creating 1D histograms
-  analysisManager
-    ->CreateH1("Chamber1","Drift Chamber 1 # Hits", 50, 0., 50); // h1 Id = 0
-  analysisManager
-    ->CreateH1("Chamber2","Drift Chamber 2 # Hits", 50, 0., 50); // h1 Id = 1
+  analysisManager->CreateH1("Chamber1","Drift Chamber 1 # Hits", 50, 0., 50); // h1 Id = 0
+  analysisManager->CreateH1("Chamber2","Drift Chamber 2 # Hits", 50, 0., 50); // h1 Id = 1
   
   // Creating 2D histograms
-  analysisManager                                                
-    ->CreateH2("Chamber1 XY","Drift Chamber 1 X vs Y",           // h2 Id = 0
+  analysisManager->CreateH2("Chamber1 XY","Drift Chamber 1 X vs Y",           // h2 Id = 0
                50, -1000., 1000, 50, -300., 300.); 
-  analysisManager                                                
-    ->CreateH2("Chamber2 XY","Drift Chamber 2 X vs Y",           // h2 Id = 1
+  analysisManager->CreateH2("Chamber2 XY","Drift Chamber 2 X vs Y",           // h2 Id = 1
                50, -1500., 1500, 50, -300., 300.);
 
   // Creating ntuple
@@ -85,6 +81,14 @@ B5RunAction::B5RunAction(B5EventAction* eventAction)
       ->CreateNtupleDColumn("ECEnergyVector", fEventAction->GetEmCalEdep()); 
     analysisManager                                   // column Id = 7
       ->CreateNtupleDColumn("HCEnergyVector", fEventAction->GetHadCalEdep());
+
+    analysisManager->CreateNtupleDColumn("Dc1HitsVector_x", fEventAction->GetDc1Hits_x());
+    analysisManager->CreateNtupleDColumn("Dc1HitsVector_y", fEventAction->GetDc1Hits_y());
+    analysisManager->CreateNtupleDColumn("Dc1HitsVector_z", fEventAction->GetDc1Hits_z());
+    analysisManager->CreateNtupleDColumn("Dc2HitsVector_x", fEventAction->GetDc2Hits_x());
+    analysisManager->CreateNtupleDColumn("Dc2HitsVector_y", fEventAction->GetDc2Hits_y());
+    analysisManager->CreateNtupleDColumn("Dc2HitsVector_z", fEventAction->GetDc2Hits_z());
+
     analysisManager->FinishNtuple();
   }
 }

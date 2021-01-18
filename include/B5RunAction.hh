@@ -33,7 +33,7 @@
 
 #include "G4UserRunAction.hh"
 #include "globals.hh"
-
+#include <vector>
 class B5EventAction;
 
 class G4Run;
@@ -51,6 +51,13 @@ class B5RunAction : public G4UserRunAction
 
   private:
     B5EventAction* fEventAction;
+
+  // std::vector<double> DriftChamberHit_x;
+  // std::vector<double> DriftChamberHit_y;
+  // std::vector<double> DriftChamberHit_z;
+  // std::vector<double> DriftChamberHit_layer;
+
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

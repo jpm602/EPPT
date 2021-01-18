@@ -43,6 +43,8 @@ const G4int kEm = 0;
 const G4int kHad = 1;
 const G4int kH1 = 0;
 const G4int kH2 = 1;
+const G4int kDc1 = 0;
+const G4int kDc2 = 1;
 const G4int kDim = 2;
 
 /// Event action
@@ -58,6 +60,13 @@ public:
 
     std::vector<G4double>& GetEmCalEdep() { return fCalEdep[kEm]; }
     std::vector<G4double>& GetHadCalEdep() { return fCalEdep[kHad]; }
+  
+    std::vector<G4double>& GetDc1Hits_x() { return fDcHits_x[kDc1]; }
+    std::vector<G4double>& GetDc2Hits_x() { return fDcHits_x[kDc2]; }
+    std::vector<G4double>& GetDc1Hits_y() { return fDcHits_y[kDc1]; }
+    std::vector<G4double>& GetDc2Hits_y() { return fDcHits_y[kDc2]; }
+    std::vector<G4double>& GetDc1Hits_z() { return fDcHits_z[kDc1]; }
+    std::vector<G4double>& GetDc2Hits_z() { return fDcHits_z[kDc2]; }
     
 private:
     // hit collections Ids
@@ -68,6 +77,9 @@ private:
     std::array<std::array<G4int, kDim>, kDim> fDriftHistoID;
     // energy deposit in calorimeters cells
     std::array<std::vector<G4double>, kDim> fCalEdep;
+    std::array<std::vector<G4double>, kDim> fDcHits_x;
+    std::array<std::vector<G4double>, kDim> fDcHits_y;
+    std::array<std::vector<G4double>, kDim> fDcHits_z;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

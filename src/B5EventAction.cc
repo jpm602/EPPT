@@ -45,6 +45,8 @@
 #include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
 
+#include "Randomize.hh"
+
 using std::array;
 using std::vector;
 
@@ -83,7 +85,11 @@ B5EventAction::B5EventAction()
   fDriftHCID{{ -1, -1 }},
   fCalHCID  {{ -1, -1 }},
   fDriftHistoID{{ {{ -1, -1 }}, {{ -1, -1 }} }},
-  fCalEdep{{ vector<G4double>(kNofEmCells, 0.), vector<G4double>(kNofHadCells, 0.) }}
+  fCalEdep{{ vector<G4double>(kNofEmCells, 0.), vector<G4double>(kNofHadCells, 0.) }},
+  fDcHits_x{{ vector<G4double>(0, 0.), vector<G4double>(0, 0.) }},
+  fDcHits_y{{ vector<G4double>(0, 0.), vector<G4double>(0, 0.) }},
+  fDcHits_z{{ vector<G4double>(0, 0.), vector<G4double>(0, 0.) }}
+
       // std::array<T, N> is an aggregate that contains a C array. 
       // To initialize it, we need outer braces for the class itself 
       // and inner braces for the C array
@@ -139,26 +145,30 @@ void B5EventAction::EndOfEventAction(const G4Event* event)
   //
   // Fill histograms & ntuple
   // 
-
   // Get analysis manager
   auto analysisManager = G4AnalysisManager::Instance();
  
   // Drift chambers hits
-  for (G4int iDet = 0; iDet < kDim; ++iDet) {
-    auto hc = GetHC(event, fDriftHCID[iDet]);
-    if ( ! hc ) return;
-
-    auto nhit = hc->GetSize();
-    analysisManager->FillH1(fDriftHistoID[kH1][iDet], nhit );
-    // columns 0, 1
-    analysisManager->FillNtupleIColumn(iDet, nhit);
+  for (G4int iDet = 0; iDet < kDim; ++iDet) 
+    {
+      auto hc = GetHC(event, fDriftHCID[iDet]);
+      if ( ! hc ) return;
+      
+      auto nhit = hc->GetSize();
+      analysisManager->FillH1(fDriftHistoID[kH1][iDet], nhit );
+      // columns 0, 1
+      analysisManager->FillNtupleIColumn(iDet, nhit);
   
-    for (unsigned long i = 0; i < nhit; ++i) {
-      auto hit = static_cast<B5DriftChamberHit*>(hc->GetHit(i));
-      auto localPos = hit->GetLocalPos();
-      analysisManager->FillH2(fDriftHistoID[kH2][iDet], localPos.x(), localPos.y());
+      for (unsigned long i = 0; i < nhit; ++i) 
+	{
+	  auto hit = static_cast<B5DriftChamberHit*>(hc->GetHit(i));
+	  auto localPos = hit->GetLocalPos();
+	  analysisManager->FillH2(fDriftHistoID[kH2][iDet], localPos.x(), localPos.y());
+	  fDcHits_x[iDet].push_back(hit->GetLocalPos().x()/mm);// + G4RandGauss::shoot(0.,0.1/mm));
+	  fDcHits_y[iDet].push_back(hit->GetLocalPos().y()/mm);// + G4RandGauss::shoot(0.,1./cm));
+	  fDcHits_z[iDet].push_back(hit->GetLayerID());
+	}
     }
-  }
       
   // Em/Had Calorimeters hits
   array<G4int, kDim> totalCalHit = {{ 0, 0 }}; 
