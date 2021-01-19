@@ -109,7 +109,7 @@ void B5EventAction::BeginOfEventAction(const G4Event*)
 {
   // Find hit collections and histogram Ids by names (just once)
   // and save them in the data members of this class
-
+  
   if (fHodHCID[0] == -1) {
     auto sdManager = G4SDManager::GetSDMpointer();
     auto analysisManager = G4AnalysisManager::Instance();
@@ -147,7 +147,13 @@ void B5EventAction::EndOfEventAction(const G4Event* event)
   // 
   // Get analysis manager
   auto analysisManager = G4AnalysisManager::Instance();
- 
+  for (G4int iDet = 0; iDet < kDim; ++iDet)
+    {
+      fDcHits_x[iDet].clear();
+      fDcHits_y[iDet].clear();
+      fDcHits_z[iDet].clear();
+    }
+  G4cout << " ‹‹‹‹‹‹ "<< fDcHits_x[0].size() << " "<< fDcHits_x[1].size() << G4endl;
   // Drift chambers hits
   for (G4int iDet = 0; iDet < kDim; ++iDet) 
     {
